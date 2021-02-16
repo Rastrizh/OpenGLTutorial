@@ -7,23 +7,38 @@
 
 #include <iostream>
 #include "Shader.h"
+#include "Camera.h"
 
 const unsigned int WIDTH = 1024;
 const unsigned int HIGHT = 768;
+
+float deltaTime = 0.f;
+float lastFrame = 0.f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int hight)
 {
 	glViewport(0, 0, width, hight);
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window, Camera &camera)
 {
+	camera.SetCameraSpeed(9.5f * deltaTime);
+
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.SetCameraPosition(camera.GetCameraPosition() + (camera.GetCameraSpeed() * camera.GetCameraFront()));
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.SetCameraPosition(camera.GetCameraPosition() - (camera.GetCameraSpeed() * camera.GetCameraFront()));
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.SetCameraPosition(camera.GetCameraPosition() - glm::normalize(glm::cross(camera.GetCameraFront(), camera.GetCameraUp())) * camera.GetCameraSpeed());
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.SetCameraPosition(camera.GetCameraPosition() + glm::normalize(glm::cross(camera.GetCameraFront(), camera.GetCameraUp())) * camera.GetCameraSpeed());
 }
 
 int main()
 {
+	float currentFrame = 0.f;
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -48,6 +63,8 @@ int main()
 
 	// Set viewport of window
 	glViewport(0, 0, WIDTH, HIGHT);
+
+	Camera camera;
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -202,7 +219,11 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		processInput(window);
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		processInput(window, camera);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -216,16 +237,12 @@ int main()
 
 		glBindVertexArray(VAO);
 
-		//glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 
-		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		camera.SetCameraView();
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HIGHT, 0.1f, 100.0f);
 
-		//ourShader.setMat4("model", model);
-		ourShader.setMat4("view", view);
+		ourShader.setMat4("view", camera.GetCameraView());
 		ourShader.setMat4("projection", projection);
 
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
