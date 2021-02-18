@@ -139,7 +139,7 @@ public:
 		if (cameraFOV > 1.0f && cameraFOV <= 45.0f)
 			cameraFOV -= yoffset;
 		else if (cameraFOV <= 1.0f)
-			cameraFOV = 1.0f;
+			cameraFOV += 1.0f;
 		else if (cameraFOV > 45.0f)
 			cameraFOV = 45.0f;
 	}
