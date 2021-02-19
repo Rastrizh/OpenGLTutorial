@@ -1296,6 +1296,8 @@
     <None Include="glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="shaders\LightingSource.fs" />
+    <None Include="shaders\LightingSource.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8_9.jpg">

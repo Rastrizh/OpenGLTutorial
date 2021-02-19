@@ -29,7 +29,7 @@ protected:
 	glm::mat4 m_cameraProjectionMatrix;
 
 public:
-	Camera(const glm::vec3& pos = { 0.f, 0.f, 3.f }, const glm::vec3& top = { 0.f, 1.f, 0.f })
+	Camera(const glm::vec3& pos = { 0.f, 0.f, 6.f }, const glm::vec3& top = { 0.f, 1.f, 0.f })
 		:
 		m_target(0.f, 0.f, -1.f)
 	{

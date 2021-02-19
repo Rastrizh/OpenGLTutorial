@@ -573,6 +573,8 @@
     <None Include="glm\gtx\vector_query.inl" />
     <None Include="glm\gtx\wrap.inl" />
     <None Include="shaders\FragmentShader.fs" />
+    <None Include="shaders\LightingSource.fs" />
+    <None Include="shaders\LightingSource.vs" />
     <None Include="shaders\VertexShader.vs" />
   </ItemGroup>
   <ItemGroup>
