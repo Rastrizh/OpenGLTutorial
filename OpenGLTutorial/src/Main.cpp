@@ -163,7 +163,6 @@ int main()
 	lightingShader.Use();
 	lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 	lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-	lightingShader.setVec3("lightPos", lightPos);
 
 	/*unsigned int texture1;
 	glGenTextures(1, &texture1);
@@ -231,6 +230,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		lightingShader.Use();
+		lightingShader.setVec3("lightPos", lightPos);
+		lightingShader.setVec3("cameraPos", cameraController.GetCameraPosition());
 
 		/*glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
