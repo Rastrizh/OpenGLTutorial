@@ -113,8 +113,6 @@ int main()
 	1, 2, 3
 	};
 
-	glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
 	/*glm::vec3 cubePositions[] = {
 		glm::vec3(0.1f,  0.1f,  -1.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
@@ -160,9 +158,21 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	glm::vec3 lightPos(0.7f, 0.5f, 2.0f);
+
 	lightingShader.Use();
-	lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-	lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+	
+	glm::vec3 lightColor = glm::vec3(1.0f);
+	glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+	glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+	lightingShader.setVec3("light.ambient", ambientColor);
+	lightingShader.setVec3("light.diffuse", diffuseColor);
+	lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+	lightingShader.setVec3("material.ambient", 0.19225f, 0.19225f, 0.19225f);
+	lightingShader.setVec3("material.diffuse", 0.50754f, 0.50754f, 0.50754f);
+	lightingShader.setVec3("material.specular", 0.628281f, 0.555802f, 0.366065f);
+	lightingShader.SetFloat("material.shininess", 32.0f);
 
 	/*unsigned int texture1;
 	glGenTextures(1, &texture1);
@@ -216,7 +226,6 @@ int main()
 	/*lightingShader.Use();
 	ourShader.SetInt("texture1", 0);
 	ourShader.SetInt("texture2", 1);*/
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -228,9 +237,9 @@ int main()
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		
 		lightingShader.Use();
-		lightingShader.setVec3("lightPos", lightPos);
+		lightingShader.setVec3("light.position", lightPos);
 		lightingShader.setVec3("cameraPos", cameraController.GetCameraPosition());
 
 		/*glActiveTexture(GL_TEXTURE0);
