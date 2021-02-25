@@ -21,7 +21,6 @@ struct Light {
  
 uniform Material material;
 uniform Light light;
-
 uniform vec3 cameraPos;
  
 void main()
