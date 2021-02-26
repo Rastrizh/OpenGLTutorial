@@ -19,7 +19,7 @@ float lastFrame = 0.0f;
 
 CameraController cameraController;
 
-glm::vec3 lightPos(0.7f, 0.5f, 2.0f);
+glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int hight);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -108,7 +108,7 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 
-	/*glm::vec3 cubePositions[] = {
+	glm::vec3 cubePositions[] = {
 		glm::vec3(0.1f,  0.1f,  -1.0f),
 		glm::vec3(2.0f,  5.0f, -15.0f),
 		glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -119,7 +119,7 @@ int main()
 		glm::vec3(1.5f,  2.0f, -2.5f),
 		glm::vec3(1.5f,  0.2f, -1.5f),
 		glm::vec3(-1.3f,  1.0f, -1.5f)
-	};*/
+	};
 
 	// Vertex buffer object creation and binding to video memory
 	unsigned int VBO, VAO;
@@ -156,7 +156,7 @@ int main()
 	lightingShader.SetInt("material.specular", 1);
 	lightingShader.SetFloat("material.shininess", 64.0f);
 
-	lightingShader.setVec3("light.position", lightPos);
+	lightingShader.setVec3("light.direction", lightDirection);
 
 	lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 	lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
@@ -191,22 +191,22 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap.id);
 
-		/*for (unsigned int i = 0; i < 10; i++)
+		glBindVertexArray(VAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		for (unsigned int i = 0; i < 10; i++)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * (i+1) *glfwGetTime();
 
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			ourShader.setMat4("model", model);
+			lightingShader.setMat4("model", model);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}*/
+		}
 
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-
-		lightCubeShader.Use();
+		/*lightCubeShader.Use();
 
 		lightCubeShader.setMat4("projection", projection);
 		lightCubeShader.setMat4("view", view);
@@ -216,7 +216,7 @@ int main()
 		lightCubeShader.setMat4("model", model);
 
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
