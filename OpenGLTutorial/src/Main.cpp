@@ -20,6 +20,7 @@ float lastFrame = 0.0f;
 CameraController cameraController;
 
 glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
+glm::vec3 lightPosition(1.0f, 1.0f, 3.0f);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int hight);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -61,7 +62,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader lightingShader("shaders/DirectionalLight.vs", "shaders/DirectionalLight.fs");
+	Shader lightingShader("shaders/PointLight.vs", "shaders/PointLight.fs");
 	Shader lightCubeShader("shaders/LightingSource.vs", "shaders/LightingSource.fs");
 	
 	float vertices[] = {
@@ -156,11 +157,16 @@ int main()
 	lightingShader.SetInt("material.specular", 1);
 	lightingShader.SetFloat("material.shininess", 64.0f);
 
-	lightingShader.setVec3("light.direction", lightDirection);
+	lightingShader.setVec3("light.position", lightPosition);
 
 	lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 	lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+	// Setting parameters for spot light fading
+	lightingShader.SetFloat("light.constant", 1.0f);
+	lightingShader.SetFloat("light.linear", 0.09f);
+	lightingShader.SetFloat("light.quadratic", 0.032f);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -206,17 +212,17 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		/*lightCubeShader.Use();
+		lightCubeShader.Use();
 
 		lightCubeShader.setMat4("projection", projection);
 		lightCubeShader.setMat4("view", view);
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
+		model = glm::translate(model, lightPosition);
 		model = glm::scale(model, glm::vec3(0.2f));
 		lightCubeShader.setMat4("model", model);
 
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);*/
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

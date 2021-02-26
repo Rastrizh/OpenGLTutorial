@@ -573,10 +573,12 @@
     <None Include="glm\gtx\vector_angle.inl" />
     <None Include="glm\gtx\vector_query.inl" />
     <None Include="glm\gtx\wrap.inl" />
-    <None Include="shaders\FragmentShader.fs" />
+    <None Include="shaders\DirectionalLight.fs" />
     <None Include="shaders\LightingSource.fs" />
     <None Include="shaders\LightingSource.vs" />
-    <None Include="shaders\VertexShader.vs" />
+    <None Include="shaders\DirectionalLight.vs" />
+    <None Include="shaders\PointLight.fs" />
+    <None Include="shaders\PointLight.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8_9.jpg" />
