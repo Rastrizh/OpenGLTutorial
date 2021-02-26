@@ -62,7 +62,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	Shader lightingShader("shaders/PointLight.vs", "shaders/PointLight.fs");
+	Shader lightingShader("shaders/SpotLight.vs", "shaders/SpotLight.fs");
 	Shader lightCubeShader("shaders/LightingSource.vs", "shaders/LightingSource.fs");
 	
 	float vertices[] = {
@@ -157,8 +157,6 @@ int main()
 	lightingShader.SetInt("material.specular", 1);
 	lightingShader.SetFloat("material.shininess", 64.0f);
 
-	lightingShader.setVec3("light.position", lightPosition);
-
 	lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 	lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 	lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
@@ -181,7 +179,10 @@ int main()
 		
 		lightingShader.Use();
 
-		lightingShader.setVec3("cameraPos", cameraController.GetCameraPosition());
+		lightingShader.setVec3("light.position", cameraController.GetCameraPosition());
+		lightingShader.setVec3("light.direction", cameraController.GetCameraDirection());
+		lightingShader.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.SetFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		cameraController.updateProjectionMatrix(cameraController.GetCameraFOV(), (float)WIDTH / (float)HIGHT);
 		glm::mat4 projection = cameraController.GetProjectionMatrix();
@@ -212,7 +213,7 @@ int main()
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
-		lightCubeShader.Use();
+		/*lightCubeShader.Use();
 
 		lightCubeShader.setMat4("projection", projection);
 		lightCubeShader.setMat4("view", view);
@@ -222,7 +223,7 @@ int main()
 		lightCubeShader.setMat4("model", model);
 
 		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

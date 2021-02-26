@@ -47,6 +47,7 @@ public:
 	glm::mat4 GetProjectionMatrix() const { return m_cameraProjectionMatrix; }
 
 	glm::vec3 inline const GetCameraPosition() const { return m_position; }
+	glm::vec3 inline const GetCameraDirection() const { return m_target; }
 
 protected:
 	void updateTarget(float yaw, float pitch)
