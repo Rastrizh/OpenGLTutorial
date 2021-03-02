@@ -9,9 +9,10 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Window.h"
 
 const unsigned int WIDTH = 1024;
-const unsigned int HIGHT = 768;
+const unsigned int HEIGHT = 768;
 
 float currentFrame = 0.f;
 float deltaTime = 0.0f;
@@ -28,38 +29,13 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 int main()
 {
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HIGHT, "OpenGLTurorial", nullptr, nullptr);
-	if (!window)
-	{
-		// Failed to create GLFW Window
-		glfwTerminate();
-		return -1;
-	}
-
-	glfwMakeContextCurrent(window);
-
-	// Registering of callback functions
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	Window window(WIDTH, HEIGHT, "OpenGL tutorial");
 		
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetInputMode(window.m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window.m_window, mouse_callback);
 
-	glfwSetScrollCallback(window, scroll_callback);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		// Failed to initialize GLAD
-		return -1;
-	}
-
-	// Set viewport of window
-	glViewport(0, 0, WIDTH, HIGHT);
-
+	glfwSetScrollCallback(window.m_window, scroll_callback);
+	
 	glEnable(GL_DEPTH_TEST);
 
 	Shader lightingShader("shaders/SpotLight.vs", "shaders/SpotLight.fs");
@@ -166,13 +142,13 @@ int main()
 	lightingShader.SetFloat("light.linear", 0.09f);
 	lightingShader.SetFloat("light.quadratic", 0.032f);
 
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window.m_window))
 	{
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		cameraController.processKeyboard(window, deltaTime);
+		cameraController.processKeyboard(window.m_window, deltaTime);
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -184,7 +160,7 @@ int main()
 		lightingShader.SetFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
 		lightingShader.SetFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
-		cameraController.updateProjectionMatrix(cameraController.GetCameraFOV(), (float)WIDTH / (float)HIGHT);
+		cameraController.updateProjectionMatrix(cameraController.GetCameraFOV(), (float)WIDTH / (float)HEIGHT);
 		glm::mat4 projection = cameraController.GetProjectionMatrix();
 		glm::mat4 view = cameraController.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
@@ -225,7 +201,7 @@ int main()
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(window.m_window);
 		glfwPollEvents();
 	}
 
@@ -249,5 +225,5 @@ void mouse_callback(GLFWwindow * window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
 {
-	cameraController.ProcessMouseScroll(yoffset, (float)WIDTH / (float)HIGHT);
+	cameraController.ProcessMouseScroll(yoffset, (float)WIDTH / (float)HEIGHT);
 }
