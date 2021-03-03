@@ -11,7 +11,7 @@ Window::Window(const unsigned int width, const unsigned int height, const char* 
 
 Window::~Window()
 {
-
+	ShutDown();
 }
 
 void Window::Init()
@@ -32,9 +32,30 @@ void Window::Init()
 		Window* w_window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
 		w_window->framebuffer_size_callback(window, width, height);
 	});
+
+	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
+		Window* w_window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+		w_window->ShutDown();
+	});
 }
 
 void Window::ShutDown()
 {
-	glfwTerminate();
+	glfwDestroyWindow(m_window);
+}
+
+void Window::OnUpdate()
+{
+	glfwSwapBuffers(m_window);
+	glfwPollEvents();
+}
+
+void Window::SetVSync(bool enabled)
+{
+	if (enabled)
+		glfwSwapInterval(1);
+	else
+		glfwSwapInterval(0);
+
+	isVSync = enabled;
 }

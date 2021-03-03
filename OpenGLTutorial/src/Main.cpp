@@ -31,9 +31,8 @@ int main()
 {
 	Window window(WIDTH, HEIGHT, "OpenGL tutorial");
 		
-	glfwSetInputMode(window.m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window.m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	glfwSetCursorPosCallback(window.m_window, mouse_callback);
-
 	glfwSetScrollCallback(window.m_window, scroll_callback);
 	
 	glEnable(GL_DEPTH_TEST);
@@ -201,15 +200,13 @@ int main()
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
-		glfwSwapBuffers(window.m_window);
-		glfwPollEvents();
+		window.OnUpdate();		
 	}
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &VBO);
 
-	glfwTerminate();
 	return 0;
 }
 
