@@ -1323,6 +1323,8 @@
     <None Include="shaders\PointLight.vs" />
     <None Include="shaders\SpotLight.fs" />
     <None Include="shaders\SpotLight.vs" />
+    <None Include="shaders\MultipleLights.fs" />
+    <None Include="shaders\MultipleLights.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8_9.jpg">

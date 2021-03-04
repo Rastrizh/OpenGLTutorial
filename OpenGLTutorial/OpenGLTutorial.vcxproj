@@ -587,6 +587,8 @@
     <None Include="shaders\LightingSource.fs" />
     <None Include="shaders\LightingSource.vs" />
     <None Include="shaders\DirectionalLight.vs" />
+    <None Include="shaders\MultipleLights.fs" />
+    <None Include="shaders\MultipleLights.vs" />
     <None Include="shaders\PointLight.fs" />
     <None Include="shaders\PointLight.vs" />
     <None Include="shaders\SpotLight.fs" />
