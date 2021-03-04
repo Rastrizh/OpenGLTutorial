@@ -6,10 +6,12 @@
 #include "vendor/stb_image/stb_image.h"
 
 #include <iostream>
+#include "Events/Event.h"
 #include "Texture.h"
 #include "Shader.h"
-#include "Camera.h"
 #include "Window.h"
+#include "Camera.h"
+
 
 const unsigned int WIDTH = 1024;
 const unsigned int HEIGHT = 768;
@@ -18,28 +20,19 @@ float currentFrame = 0.f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-CameraController cameraController;
-
 glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
 glm::vec3 lightPosition(1.0f, 1.0f, 3.0f);
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int hight);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
 int main()
 {
-	Window window(WIDTH, HEIGHT, "OpenGL tutorial");
-		
-	glfwSetInputMode(window.m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	glfwSetCursorPosCallback(window.m_window, mouse_callback);
-	glfwSetScrollCallback(window.m_window, scroll_callback);
-	
+	Window* window = Window::GetInstance();
 	glEnable(GL_DEPTH_TEST);
+
+	CameraController cameraController;
 
 	Shader lightingShader("shaders/SpotLight.vs", "shaders/SpotLight.fs");
 	Shader lightCubeShader("shaders/LightingSource.vs", "shaders/LightingSource.fs");
-	
+
 	float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -123,10 +116,10 @@ int main()
 	glEnableVertexAttribArray(0);
 
 	Texture2D diffuseMap("../contents/textures/StealRimContainer.png");
-	
+
 	Texture2D specularMap;
 	specularMap.CreateTexture("../contents/textures/StealRim.png");
-	
+
 	lightingShader.Use();
 	lightingShader.SetInt("material.diffuse", 0);
 	lightingShader.SetInt("material.specular", 1);
@@ -141,13 +134,13 @@ int main()
 	lightingShader.SetFloat("light.linear", 0.09f);
 	lightingShader.SetFloat("light.quadratic", 0.032f);
 
-	while (!glfwWindowShouldClose(window.m_window))
+	while (!glfwWindowShouldClose(window->GetNativeWindow()))
 	{
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		cameraController.processKeyboard(window.m_window, deltaTime);
+		cameraController.processKeyboard(window->GetNativeWindow(), deltaTime);
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -200,7 +193,7 @@ int main()
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);*/
 
-		window.OnUpdate();		
+		window->OnUpdate();		
 	}
 
 	glDeleteVertexArrays(1, &VAO);
@@ -208,19 +201,4 @@ int main()
 	glDeleteBuffers(1, &VBO);
 
 	return 0;
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int hight)
-{
-	glViewport(0, 0, width, hight);
-}
-
-void mouse_callback(GLFWwindow * window, double xpos, double ypos)
-{
-	cameraController.processMouse(xpos, ypos);
-}
-
-void scroll_callback(GLFWwindow * window, double xoffset, double yoffset)
-{
-	cameraController.ProcessMouseScroll(yoffset, (float)WIDTH / (float)HEIGHT);
 }
