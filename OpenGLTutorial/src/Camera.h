@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Input.h"
 
 enum Camera_Movement
 {
@@ -87,21 +88,33 @@ public:
 		firstMouse = true;
 		yaw = YAW;
 		pitch = PITCH;
+
+		Input::GetInstance()->mouse_moved_event += [this](double xpos, double ypos) {
+			processMouse(xpos, ypos);
+		};
+
+		Input::GetInstance()->mouse_scrolled_event += [this](double yoffset, float aspect_ratio) {
+			ProcessMouseScroll(yoffset, aspect_ratio);
+		};
 	}
 
 	void processKeyboard(GLFWwindow* window, float deltaTime)
 	{
 		float cameraVelocity = cameraSpeed * deltaTime;
 
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(window, true);
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		if(Input::IsKeyPressed(GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(window, true);	
+
+		if (Input::IsKeyPressed(GLFW_KEY_W))
 			m_position += m_target * cameraVelocity;
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		
+		if (Input::IsKeyPressed(GLFW_KEY_S))
 			m_position -= m_target * cameraVelocity;
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		
+		if (Input::IsKeyPressed(GLFW_KEY_A))
 			m_position -= m_right * cameraVelocity;
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		
+		if (Input::IsKeyPressed(GLFW_KEY_D))
 			m_position += m_right * cameraVelocity;
 
 		updateTarget(yaw, pitch);
