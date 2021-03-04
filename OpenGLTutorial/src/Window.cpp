@@ -1,6 +1,10 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "Events/KeyEvents.h"
 #include "Window.h"
+#include "Input.h"
+
+Window* Window::s_window = new Window();
 
 Window::Window(const unsigned int width, const unsigned int height, const char* title)
 	:
@@ -28,14 +32,23 @@ void Window::Init()
 
 	glfwSetWindowUserPointer(m_window, reinterpret_cast<void*>(this));
 
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	framebuffer_size_event += [this](int width, int height) {
+		OnFramebufferSize(width, height);
+	};
+
 	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
 		Window* w_window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-		w_window->framebuffer_size_callback(window, width, height);
+		w_window->framebuffer_size_event(width, height);
 	});
 
-	glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window) {
-		Window* w_window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-		w_window->ShutDown();
+	glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos) {
+		Input::GetInstance()->mouse_moved_event(xpos, ypos);
+	});
+
+	glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
+		Input::GetInstance()->mouse_scrolled_event(yoffset, (float)(Window::GetInstance()->GetWidth() / Window::GetInstance()->GetHeight()));
 	});
 }
 
