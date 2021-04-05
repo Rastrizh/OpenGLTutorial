@@ -6,8 +6,10 @@ in vec3 Normal;
 in vec2 TexCoords;
 
 struct Material {
-    sampler2D diffuse;
-    sampler2D specular;
+    sampler2D diffuse[3];
+    sampler2D specular[2];
+	sampler2D normal[2];
+	sampler2D hight[2];
     float shininess;
 };   
 uniform Material material;

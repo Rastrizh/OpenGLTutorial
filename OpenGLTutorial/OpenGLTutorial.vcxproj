@@ -151,6 +151,7 @@
     <ClCompile Include="glm\detail\glm.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Model\Mesh.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
@@ -441,6 +442,7 @@
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\KeyEvents.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Model\Mesh.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Window.h" />
