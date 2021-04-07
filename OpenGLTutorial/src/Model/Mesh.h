@@ -1,6 +1,10 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "glm/glm.hpp"
+#include "../Shader.h"
+#include "../Texture.h"
+
 struct Vertex
 {
 	glm::vec3 position;
@@ -13,13 +17,14 @@ enum TexType
 	diffuse,
 	specular,
 	normal,
-	hight
+	height
 };
 
 struct Texture
 {
 	Texture2D texture;
 	TexType type;
+	std::string path;
 };
 
 class Mesh
@@ -28,11 +33,6 @@ public:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
 	std::vector<Texture> m_textures;
-
-	Mesh(const Mesh&) = delete;
-	Mesh& operator=(const Mesh&) = delete;
-	Mesh(Mesh&&) = delete;
-	Mesh& operator=(Mesh&&) = delete;
 
 	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
 	void Draw(Shader shader);
