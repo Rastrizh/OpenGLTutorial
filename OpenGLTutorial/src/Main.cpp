@@ -138,7 +138,7 @@ int main()
 	lightingShader.SetFloat("material.shininess", 64.0f);
 
 	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
-	lightingShader.setVec3("directionlight.ambient", 0.2f, 0.2f, 0.2f);
+	lightingShader.setVec3("directionlight.ambient", 0.7f, 0.7f, 0.7f);
 	lightingShader.setVec3("directionlight.diffuse", 0.9f, 0.9f, 0.9f);
 	lightingShader.setVec3("directionlight.specular", 0.5f, 0.5f, 0.5f);
 

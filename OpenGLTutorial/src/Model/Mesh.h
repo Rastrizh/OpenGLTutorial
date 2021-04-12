@@ -14,10 +14,10 @@ struct Vertex
 
 enum TexType
 {
-	diffuse,
-	specular,
-	normal,
-	height
+	diffuse = 1,
+	specular = 2,
+	height = 5,
+	normal = 6
 };
 
 struct Texture
