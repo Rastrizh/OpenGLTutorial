@@ -12,29 +12,14 @@ struct Vertex
 	glm::vec2 texCoords;
 };
 
-enum TexType
-{
-	diffuse = 1,
-	specular = 2,
-	height = 5,
-	normal = 6
-};
-
-struct Texture
-{
-	Texture2D texture;
-	TexType type;
-	std::string path;
-};
-
 class Mesh
 {
 public:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
-	std::vector<Texture> m_textures;
+	std::vector<Texture2D> m_textures;
 
-	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures);
+	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture2D>& textures);
 	void Draw(Shader shader);
 
 private:

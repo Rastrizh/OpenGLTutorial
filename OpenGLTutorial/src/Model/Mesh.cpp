@@ -1,7 +1,7 @@
 #include <vector>
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture>& textures)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture2D>& textures)
 	:
 	m_vertices(vertices),
 	m_indices(indices),
@@ -12,16 +12,16 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 
 void Mesh::Draw(Shader shader)
 {
-	unsigned int diffNum = 1;
-	unsigned int specNum = 1;
-	unsigned int normalNum = 1;
-	unsigned int hightNum = 1;
+	unsigned int diffNum = 0;
+	unsigned int specNum = 0;
+	unsigned int normalNum = 0;
+	unsigned int hightNum = 0;
 
 	for (unsigned int i = 0; i < m_textures.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 
-		switch (m_textures[i].type)
+		switch (m_textures[i].m_type)
 		{
 		case 0:
 			shader.SetFloat("material.diffuse[diffNum]", i);
@@ -42,7 +42,7 @@ void Mesh::Draw(Shader shader)
 		default:
 			break;
 		}
-		m_textures[i].texture.Bind();
+		m_textures[i].Bind();
 	}
 	glActiveTexture(GL_TEXTURE0);
 

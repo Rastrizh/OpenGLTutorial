@@ -44,7 +44,7 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	std::vector<Texture2D> textures;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -82,25 +82,25 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-		std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, diffuse);
+		std::vector<Texture2D> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, diffuse);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-		std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, specular);
+		std::vector<Texture2D> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, specular);
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-		std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, normal);
+		std::vector<Texture2D> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, normal);
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-		std::vector<Texture> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, height);
+		std::vector<Texture2D> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, height);
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 	}
 
 	return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
+std::vector<Texture2D> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
 {
-	std::vector<Texture> textures;
+	std::vector<Texture2D> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -108,7 +108,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType 
 		bool skip = false;
 		for (unsigned int j = 0; j < loaded_textures.size(); j++)
 		{
-			if (std::strcmp(loaded_textures[j].path.data(), str.C_Str()) == 0)
+			if (std::strcmp(loaded_textures[j].m_path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(loaded_textures[j]);
 				skip = true;
@@ -120,11 +120,9 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType 
 			std::string filename(str.C_Str());
 			filename = directory + '/' + filename;
 
-			Texture texture;
-			Texture2D tex(filename.c_str());
-			texture.texture = tex;
-			texture.type = typeName;
-			texture.path = str.C_Str();
+			Texture2D texture(filename.c_str());
+			texture.m_path = str.C_Str();
+			texture.m_type = typeName;
 			textures.push_back(texture);
 			loaded_textures.push_back(texture);
 		}

@@ -130,19 +130,9 @@ int main()
 	glEnableVertexAttribArray(0);
 
 	Texture2D diffuseMap("../contents/textures/StealRimContainer.png");
-	Texture2D specularMap("../contents/textures/StealRim.png");*/
-
-	lightingShader.Use();
-	//lightingShader.SetInt("material.diffuse", 0);
-	//lightingShader.SetInt("material.specular", 1);
-	lightingShader.SetFloat("material.shininess", 64.0f);
-
-	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
-	lightingShader.setVec3("directionlight.ambient", 0.7f, 0.7f, 0.7f);
-	lightingShader.setVec3("directionlight.diffuse", 0.9f, 0.9f, 0.9f);
-	lightingShader.setVec3("directionlight.specular", 0.5f, 0.5f, 0.5f);
-
-	/*lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+	Texture2D specularMap("../contents/textures/StealRim.png");
+	
+	lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
 	lightingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
 	lightingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
 	lightingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
@@ -182,6 +172,14 @@ int main()
 	lightingShader.SetFloat("spotlight.quadratic", 0.032);
 	lightingShader.SetFloat("spotlight.cutOff", glm::cos(glm::radians(12.5f)));
 	lightingShader.SetFloat("spotlight.outerCutOff", glm::cos(glm::radians(15.0f)));*/
+
+	lightingShader.Use();
+	lightingShader.SetFloat("material.shininess", 64.0f);
+	
+	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
+	lightingShader.setVec3("directionlight.ambient", 0.05f, 0.05f, 0.05f);
+	lightingShader.setVec3("directionlight.diffuse", 0.9f, 0.9f, 0.9f);
+	lightingShader.setVec3("directionlight.specular", 0.5f, 0.5f, 0.5f);
 
 	while (!glfwWindowShouldClose(window->GetNativeWindow()))
 	{

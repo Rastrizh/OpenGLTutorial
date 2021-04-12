@@ -4,6 +4,14 @@
 #include "glad/glad.h"
 #include "vendor/stb_image/stb_image.h"
 
+enum TexType
+{
+	diffuse = 1,
+	specular = 2,
+	height = 5,
+	normal = 6
+};
+
 class Texture2D
 {
 public:
@@ -12,6 +20,10 @@ public:
 	int m_height;
 	int m_nrChannels;
 	GLenum m_format = GL_RGB;
+
+	TexType m_type;
+	std::string m_path;
+
 private:
 	unsigned char* m_data;
 public:
