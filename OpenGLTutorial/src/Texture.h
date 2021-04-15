@@ -94,11 +94,13 @@ public:
 			SetFiltering(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			
 			stbi_image_free(m_data);
+			m_data = nullptr;
 		}
 		else
 		{
 			// throw an exception
 			stbi_image_free(m_data);
+			m_data = nullptr;
 		}
 	}
 
