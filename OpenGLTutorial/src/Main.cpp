@@ -37,7 +37,7 @@ int main()
 	Shader lightingShader("shaders/MultipleLights.vs", "shaders/MultipleLights.fs");
 	Shader lightCubeShader("shaders/LightingSource.vs", "shaders/LightingSource.fs");
 
-	Model ourModel("../contents/assets/backpack_obj/backpack.obj");
+	Model ourModel("../contents/assets/crytek-sponza-huge-vray-obj/crytek-sponza-huge-vray.obj");
 
 /*
 	float vertices[] = {
@@ -208,7 +208,7 @@ int main()
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 		lightingShader.setMat4("model", model);
 		ourModel.Draw(lightingShader);
 
