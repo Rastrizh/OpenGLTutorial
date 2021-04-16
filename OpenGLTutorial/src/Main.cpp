@@ -24,20 +24,29 @@ float currentFrame = 0.f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-glm::vec3 lightDirection(-0.2f, -1.0f, -0.3f);
+glm::vec3 lightDirection(-0.4f, -1.0f, -0.5f);
 glm::vec3 lightPosition(1.0f, 1.0f, 3.0f);
 
 int main()
 {
 	Window* window = Window::GetInstance();
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_STENCIL_TEST);
+	
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+
+	glEnable(GL_CULL_FACE);
 
 	CameraController cameraController;
 
-	Shader lightingShader("shaders/MultipleLights.vs", "shaders/MultipleLights.fs");
+	Shader lightingShader("shaders/testVert.vs", "shaders/MultipleLights.fs");
 	Shader lightCubeShader("shaders/LightingSource.vs", "shaders/LightingSource.fs");
 
-	Model ourModel("../contents/assets/crytek-sponza-huge-vray-obj/crytek-sponza-huge-vray.obj");
+	Model ourModel("../contents/assets/dae/sponza.dae");
 
 /*
 	float vertices[] = {
@@ -177,9 +186,9 @@ int main()
 	lightingShader.SetFloat("material.shininess", 64.0f);
 	
 	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
-	lightingShader.setVec3("directionlight.ambient", 0.05f, 0.05f, 0.05f);
-	lightingShader.setVec3("directionlight.diffuse", 0.9f, 0.9f, 0.9f);
-	lightingShader.setVec3("directionlight.specular", 0.5f, 0.5f, 0.5f);
+	lightingShader.setVec3("directionlight.ambient", 0.2f, 0.2f, 0.2f);
+	lightingShader.setVec3("directionlight.diffuse", 0.8f, 0.8f, 0.8f);
+	lightingShader.setVec3("directionlight.specular", 0.6f, 0.6f, 0.6f);
 
 	while (!glfwWindowShouldClose(window->GetNativeWindow()))
 	{
@@ -190,7 +199,7 @@ int main()
 		cameraController.processKeyboard(window->GetNativeWindow(), deltaTime);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		
 		lightingShader.Use();
 		lightingShader.setVec3("cameraPos", cameraController.GetCameraPosition());
