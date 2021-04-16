@@ -39,6 +39,9 @@
     <ClCompile Include="src\Model\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -1337,6 +1340,8 @@
     <None Include="shaders\SpotLight.vs" />
     <None Include="shaders\MultipleLights.fs" />
     <None Include="shaders\MultipleLights.vs" />
+    <None Include="shaders\testFrag.fs" />
+    <None Include="shaders\testVert.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8_9.jpg">
