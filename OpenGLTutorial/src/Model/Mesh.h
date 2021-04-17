@@ -4,13 +4,14 @@
 #include "glm/glm.hpp"
 #include "../Shader.h"
 #include "../Texture.h"
-
-struct Vertex
-{
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 texCoords;
-};
+#include "../VertexArray.h"
+//
+//struct Vertex
+//{
+//	glm::vec3 position;
+//	glm::vec3 normal;
+//	glm::vec2 texCoords;
+//};
 
 class Mesh
 {
@@ -19,11 +20,11 @@ public:
 	std::vector<unsigned int> m_indices;
 	std::vector<Texture2D> m_textures;
 
-	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<Texture2D>& textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture2D> textures);
 	void Draw(Shader shader);
 
 private:
-	unsigned int VBO, EBO, VAO;
+	std::shared_ptr<VertexArray> VAO;
 
 	void SetupMesh();
 };
