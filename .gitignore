@@ -262,3 +262,4 @@ __pycache__/
 /bin
 /bin-int
 .clang-tidy
+.clang*
