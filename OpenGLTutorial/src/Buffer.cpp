@@ -1,5 +1,6 @@
 #include "Buffer.h"
 #include <glad/glad.h>
+#include <iostream>
 
 VertexBuffer::VertexBuffer(size_t size)
 {
@@ -13,6 +14,13 @@ VertexBuffer::VertexBuffer(std::vector<Vertex>& vertices)
 	glGenBuffers(1, &ID);
 	glBindBuffer(GL_ARRAY_BUFFER, ID);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), (void*)&vertices[0], GL_STATIC_DRAW);
+}
+
+VertexBuffer::VertexBuffer(const float * vertices, unsigned int size)
+{
+	glGenBuffers(1, &ID);
+	glBindBuffer(GL_ARRAY_BUFFER, ID);
+	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
 
 VertexBuffer::~VertexBuffer()

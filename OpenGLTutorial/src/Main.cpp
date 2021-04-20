@@ -59,12 +59,12 @@ int main()
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	unsigned int quadVAO, quadVBO;
+	std::cout << sizeof(quadVertices) / sizeof(float) << "\n";
+
+	unsigned int quadVAO;
 	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
+	VertexBuffer quadVBO(quadVertices, sizeof(quadVertices));
 	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);

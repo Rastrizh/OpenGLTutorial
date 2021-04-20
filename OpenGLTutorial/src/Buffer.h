@@ -15,9 +15,11 @@ class VertexBuffer
 {
 private:
 	unsigned int ID;
+
 public:
 	VertexBuffer(size_t size);
 	VertexBuffer(std::vector<Vertex>& vertices);
+	VertexBuffer(const float *vertices, unsigned int size);
 	~VertexBuffer();
 
 	void Bind() const;
