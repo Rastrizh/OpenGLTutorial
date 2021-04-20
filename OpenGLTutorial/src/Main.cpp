@@ -15,6 +15,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Model/Model.h"
+#include "FrameBuffer.h"
 
 
 const unsigned int WIDTH = 1024;
@@ -44,8 +45,30 @@ int main()
 	CameraController cameraController;
 
 	Shader lightingShader("shaders/testVert.vs", "shaders/MultipleLights.fs");
+	Shader screenShader("shaders/framebuffers_screen.vs", "shaders/framebuffers_screen.fs");
 
 	Model ourModel("../contents/assets/crytek-sponza-huge-vray-obj/crytek-sponza-huge-vray.obj");
+
+	float quadVertices[] = { 
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+	};
+
+	unsigned int quadVAO, quadVBO;
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
 	lightingShader.Use();
 	lightingShader.SetFloat("material.shininess", 64.0f);
@@ -55,6 +78,11 @@ int main()
 	lightingShader.setVec3("directionlight.diffuse", 0.8f, 0.8f, 0.8f);
 	lightingShader.setVec3("directionlight.specular", 0.6f, 0.6f, 0.6f);
 
+	screenShader.Use();
+	screenShader.SetInt("screenTexture", 0);
+
+	FrameBuffer framebuffer(1);
+
 	while (!glfwWindowShouldClose(window->GetNativeWindow()))
 	{
 		currentFrame = glfwGetTime();
@@ -63,8 +91,12 @@ int main()
 
 		cameraController.processKeyboard(window->GetNativeWindow(), deltaTime);
 
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		framebuffer.Bind();
+		glEnable(GL_DEPTH_TEST); // включение режима теста глубины 
+
+		// Убеждаемся, что очистили содержимое фреймбуфера
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		lightingShader.Use();
 		lightingShader.setVec3("cameraPos", cameraController.GetCameraPosition());
@@ -81,6 +113,20 @@ int main()
 		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 		lightingShader.setMat4("model", model);
 		ourModel.Draw(lightingShader);
+
+		// Теперь снова привязывемся к фреймбуферу, заданному по умолчанию и отрисовываем прямоугольник с прикрепленной цветовой текстурой фреймбуфера
+		framebuffer.Unbind();
+		glDisable(GL_DEPTH_TEST); // отключаем режим теста глубины. Теперь экранный прямоугольник не будет отсекаться в результате прохождения данного теста
+
+		// Очищаем все сопутствующие буферы
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // устанавливаем цвет заливки на "белый" (установите прозрачный цвет на белый (на самом деле это не обязательно, так как мы все равно не сможем видеть пространство за прямоугольником))
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		screenShader.Use();
+		glBindVertexArray(quadVAO);
+		glBindTexture(GL_TEXTURE_2D, framebuffer.GetColorAttachment()); // используем прикрепленную цветовую текстуру в качестве текстуры для прямоугольника
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
 		window->OnUpdate();		
 	}

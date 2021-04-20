@@ -48,6 +48,9 @@
     <ClCompile Include="src\VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -932,6 +935,9 @@
     <ClInclude Include="src\VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\detail\func_common.inl">
@@ -1354,6 +1360,8 @@
     <None Include="shaders\MultipleLights.vs" />
     <None Include="shaders\testFrag.fs" />
     <None Include="shaders\testVert.vs" />
+    <None Include="shaders\framebuffers_screen.fs" />
+    <None Include="shaders\framebuffers_screen.vs" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\8_9.jpg">
