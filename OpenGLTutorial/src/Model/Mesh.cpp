@@ -24,19 +24,19 @@ void Mesh::Draw(Shader shader)
 
 		switch (m_textures[i].m_type)
 		{
-		case 0:
+		case diffuse:
 			shader.SetFloat("material.diffuse[diffNum]", i);
 			diffNum++;
 			break;
-		case 1:
+		case specular:
 			shader.SetFloat("material.specular[specNum]", i);
 			specNum++;
 			break;
-		case 2:
+		case normal:
 			shader.SetFloat("material.normal[normalNum]", i);
 			normalNum++;
 			break;
-		case 3:
+		case height:
 			shader.SetFloat("material.hight[hightNum]", i);
 			hightNum++;
 			break;

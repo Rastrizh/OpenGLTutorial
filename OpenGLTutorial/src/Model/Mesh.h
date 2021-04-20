@@ -5,13 +5,6 @@
 #include "../Shader.h"
 #include "../Texture.h"
 #include "../VertexArray.h"
-//
-//struct Vertex
-//{
-//	glm::vec3 position;
-//	glm::vec3 normal;
-//	glm::vec2 texCoords;
-//};
 
 class Mesh
 {
