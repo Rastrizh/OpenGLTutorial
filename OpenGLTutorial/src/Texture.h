@@ -25,7 +25,7 @@ private:
 	int m_width;
 	int m_height;
 	int m_nrChannels;
-	GLenum m_format = GL_RGB;
+	GLenum m_format = GL_RGBA;
 public:
 	Texture2D(unsigned int width, unsigned int hight);
 	Texture2D(const char* path);

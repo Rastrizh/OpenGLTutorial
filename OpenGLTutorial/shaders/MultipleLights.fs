@@ -17,9 +17,9 @@ uniform Material material;
 struct DirectionLight {
     vec3 direction;
   
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec4 ambient;
+    vec4 diffuse;
+    vec4 specular;
 };
  uniform DirectionLight directionlight;
 
@@ -55,7 +55,7 @@ SpotLight spotlight;
 
 uniform vec3 cameraPos;
 
-vec3 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir);
+vec4 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir);
 vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalculateSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
  
@@ -64,17 +64,17 @@ void main()
 	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
 
-	vec3 result = CalculateDirectionLight(directionlight, norm, viewDir);
+	vec4 result = CalculateDirectionLight(directionlight, norm, viewDir);
 
 	//for(int i = 0; i < NR_POINT_LIGHTS; i++)
     //    result += CalculatePointLight(pointLights[i], norm, FragPos, viewDir);
 
 	//result += CalculateSpotLight(spotlight, norm, FragPos, viewDir);
 	
-    FragColor = vec4(result, 1.0);
+    FragColor = result;
 }
 
-vec3 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir)
+vec4 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir)
 {
 	vec3 lightDir = normalize(-light.direction);
 
@@ -83,15 +83,17 @@ vec3 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir)
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
 
 	for(int i = 0; i < 2; i++)
 	{
-		ambient = light.ambient * vec3(texture(material.diffuse[i], TexCoords));
-		diffuse = light.diffuse * diff * vec3(texture(material.diffuse[i], TexCoords));
-		specular = light.specular * spec * vec3(texture(material.specular[i], TexCoords));
+		ambient = light.ambient * texture(material.diffuse[i], TexCoords);
+		if(ambient.a < 0.1)
+			discard;
+		diffuse = light.diffuse * diff * texture(material.diffuse[i], TexCoords);
+		specular = light.specular * spec * texture(material.specular[i], TexCoords);
 	}
 	return (ambient + diffuse + specular);
 }

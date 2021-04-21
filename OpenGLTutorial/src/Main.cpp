@@ -71,9 +71,9 @@ int main()
 	lightingShader.SetFloat("material.shininess", 64.0f);
 	
 	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
-	lightingShader.setVec3("directionlight.ambient", 0.2f, 0.2f, 0.2f);
-	lightingShader.setVec3("directionlight.diffuse", 0.8f, 0.8f, 0.8f);
-	lightingShader.setVec3("directionlight.specular", 0.6f, 0.6f, 0.6f);
+	lightingShader.setVec4("directionlight.ambient", 0.2f, 0.2f, 0.2f, 1.0f);
+	lightingShader.setVec4("directionlight.diffuse", 0.8f, 0.8f, 0.8f, 1.0f);
+	lightingShader.setVec4("directionlight.specular", 0.6f, 0.6f, 0.6f, 1.0f);
 
 	screenShader.Use();
 	screenShader.SetInt("screenTexture", 0);
