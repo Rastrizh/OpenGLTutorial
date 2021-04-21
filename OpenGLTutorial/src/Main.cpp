@@ -48,25 +48,6 @@ int main()
 
 	Model ourModel("../contents/assets/crytek-sponza-huge-vray-obj/crytek-sponza-huge-vray.obj");
 
-	float quadVertices[] = { 
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
-	};
-
-	unsigned int quadVAO;
-	glGenVertexArrays(1, &quadVAO);
-	VertexBuffer quadVBO(quadVertices, sizeof(quadVertices));
-	glBindVertexArray(quadVAO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
 	lightingShader.Use();
 	lightingShader.SetFloat("material.shininess", 64.0f);
 	
@@ -120,10 +101,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		screenShader.Use();
-		glBindVertexArray(quadVAO);
-		glBindTexture(GL_TEXTURE_2D, framebuffer.GetColorAttachment()); // используем прикрепленную цветовую текстуру в качестве текстуры для прямоугольника
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-
+		framebuffer.Draw();
 
 		window->OnUpdate();		
 	}

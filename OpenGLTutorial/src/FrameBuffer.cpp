@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "FrameBuffer.h"
+#include "Buffer.h"
 
 FrameBuffer::FrameBuffer(unsigned int numColorAttachments)
 {
@@ -10,7 +11,10 @@ FrameBuffer::FrameBuffer(unsigned int numColorAttachments)
 
 FrameBuffer::~FrameBuffer()
 {
-
+	glDeleteFramebuffers(1, &ID);
+	glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
+	glDeleteRenderbuffers(1, &m_depthAttachment);
+	//glDeleteTextures(1, &m_depthAttachment);
 }
 
 void FrameBuffer::Initialize(unsigned int numColorAttachments)
@@ -40,9 +44,12 @@ void FrameBuffer::Initialize(unsigned int numColorAttachments)
 	BindRenderBuffer(m_depthAttachment);
 	AttachDepth(m_depthAttachment, GL_DEPTH24_STENCIL8, 1024, 720, GL_DEPTH_STENCIL_ATTACHMENT, DepthAttachmentType::RBO);
 
+	CreateScreenQuad();
+
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
 
 void FrameBuffer::Bind()
@@ -54,6 +61,14 @@ void FrameBuffer::Bind()
 void FrameBuffer::Unbind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void FrameBuffer::Draw()
+{
+	glBindVertexArray(quadVAO);
+	glBindTexture(GL_TEXTURE_2D, m_colorAttachments[0]); // используем прикрепленную цветовую текстуру в качестве текстуры для прямоугольника
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 void FrameBuffer::CreateTextures(unsigned int* id, unsigned int count)
@@ -107,4 +122,29 @@ void FrameBuffer::CreateRenderBuffer(unsigned int* id)
 void FrameBuffer::BindRenderBuffer(unsigned int id)
 {
 	glBindRenderbuffer(GL_RENDERBUFFER, id);
+}
+
+void FrameBuffer::CreateScreenQuad()
+{
+	float quadVertices[] = {
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+	};
+
+	glGenVertexArrays(1, &quadVAO);
+	unsigned int quadVBO;
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glBindVertexArray(quadVAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
