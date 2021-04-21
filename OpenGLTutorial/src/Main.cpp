@@ -17,7 +17,6 @@
 #include "Model/Model.h"
 #include "FrameBuffer.h"
 
-
 const unsigned int WIDTH = 1024;
 const unsigned int HEIGHT = 768;
 
@@ -31,7 +30,7 @@ glm::vec3 lightPosition(1.0f, 1.0f, 3.0f);
 int main()
 {
 	Window* window = Window::GetInstance();
-	
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -58,8 +57,6 @@ int main()
 		 1.0f, -1.0f,  1.0f, 0.0f,
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
-
-	std::cout << sizeof(quadVertices) / sizeof(float) << "\n";
 
 	unsigned int quadVAO;
 	glGenVertexArrays(1, &quadVAO);

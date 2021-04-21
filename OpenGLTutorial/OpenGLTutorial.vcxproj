@@ -453,6 +453,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\Buffer.h" />
+    <ClInclude Include="src\Utils\OpenGLDebug.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
