@@ -2,7 +2,6 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "FrameBuffer.h"
-#include "Buffer.h"
 
 FrameBuffer::FrameBuffer(unsigned int numColorAttachments)
 {
@@ -137,12 +136,8 @@ void FrameBuffer::CreateScreenQuad()
 	};
 
 	glGenVertexArrays(1, &quadVAO);
-	unsigned int quadVBO;
-	glGenBuffers(1, &quadVBO);
 	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-	glBindVertexArray(quadVAO);
+	quadVBO = std::make_shared<VertexBuffer>(quadVertices, sizeof(quadVertices));
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);

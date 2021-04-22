@@ -1,6 +1,8 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
+#include "Buffer.h"
+
 enum DepthAttachmentType
 {
 	RBO,
@@ -14,6 +16,7 @@ private:
 	std::vector<unsigned int> m_colorAttachments;
 	unsigned int m_depthAttachment;
 	unsigned int quadVAO;
+	std::shared_ptr<VertexBuffer> quadVBO;
 public:
 	FrameBuffer(unsigned int numColorAttachments);
 	~FrameBuffer();
