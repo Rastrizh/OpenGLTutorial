@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "Model/Model.h"
 #include "FrameBuffer.h"
+#include "CubeMap.h"
 
 const unsigned int WIDTH = 1024;
 const unsigned int HEIGHT = 768;
@@ -44,9 +45,21 @@ int main()
 	CameraController cameraController;
 
 	Shader lightingShader("shaders/testVert.vs", "shaders/MultipleLights.fs");
+	Shader skyboxShader("shaders/skyboxShader.vs", "shaders/skyboxShader.fs");
 	Shader screenShader("shaders/framebuffers_screen.vs", "shaders/framebuffers_screen.fs");
 
 	Model ourModel("../contents/assets/crytek-sponza-huge-vray-obj/crytek-sponza-huge-vray.obj");
+
+	std::vector<std::string> faces
+	{
+		"../contents/textures/skybox/right.jpg",
+		"../contents/textures/skybox/left.jpg",
+		"../contents/textures/skybox/top.jpg",
+		"../contents/textures/skybox/bottom.jpg",
+		"../contents/textures/skybox/front.jpg",
+		"../contents/textures/skybox/back.jpg"
+	};
+	Cubemap skybox(faces);
 
 	lightingShader.Use();
 	lightingShader.SetFloat("material.shininess", 64.0f);
@@ -58,6 +71,9 @@ int main()
 
 	screenShader.Use();
 	screenShader.SetInt("screenTexture", 0);
+
+	skyboxShader.Use();
+	skyboxShader.SetInt("skybox", 0);
 
 	FrameBuffer framebuffer(1);
 
@@ -91,6 +107,15 @@ int main()
 		model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 		lightingShader.setMat4("model", model);
 		ourModel.Draw(lightingShader);
+
+		glDepthFunc(GL_LEQUAL); // меняем функцию глубины, чтобы обеспечить прохождение теста глубины, когда значения равны содержимому буфера глубины
+		skyboxShader.Use();
+		view = glm::mat4(glm::mat3(cameraController.GetViewMatrix())); // убираем из матрицы вида секцию, отвечающую за операцию трансляции
+		skyboxShader.setMat4("view", view);
+		skyboxShader.setMat4("projection", projection);
+
+		skybox.DrawSkybox();
+		glDepthFunc(GL_LESS); // восстанавливаем стандартное значение функции теста глубины
 
 		// Теперь снова привязывемся к фреймбуферу, заданному по умолчанию и отрисовываем прямоугольник с прикрепленной цветовой текстурой фреймбуфера
 		framebuffer.Unbind();

@@ -150,6 +150,7 @@
     <ClCompile Include="GLAD\glad.c" />
     <ClCompile Include="glm\detail\glm.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
+    <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\FrameBuffer.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -444,6 +445,7 @@
     <ClInclude Include="glm\vec4.hpp" />
     <ClInclude Include="glm\vector_relational.hpp" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\CubeMap.h" />
     <ClInclude Include="src\Events\Event.h" />
     <ClInclude Include="src\Events\KeyEvents.h" />
     <ClInclude Include="src\FrameBuffer.h" />
@@ -605,6 +607,8 @@
     <None Include="shaders\MultipleLights.vs" />
     <None Include="shaders\PointLight.fs" />
     <None Include="shaders\PointLight.vs" />
+    <None Include="shaders\skyboxShader.fs" />
+    <None Include="shaders\skyboxShader.vs" />
     <None Include="shaders\SpotLight.fs" />
     <None Include="shaders\SpotLight.vs" />
     <None Include="shaders\testFrag.fs" />
