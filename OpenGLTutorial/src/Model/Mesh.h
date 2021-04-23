@@ -11,9 +11,9 @@ class Mesh
 public:
 	std::vector<Vertex> m_vertices;
 	std::vector<unsigned int> m_indices;
-	std::vector<Texture2D> m_textures;
+	std::vector<std::shared_ptr<Texture2D>> m_textures;
 
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture2D> textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture2D>> textures);
 	void Draw(Shader shader);
 
 private:

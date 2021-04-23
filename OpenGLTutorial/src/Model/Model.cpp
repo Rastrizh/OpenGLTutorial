@@ -44,7 +44,7 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture2D> textures;
+	std::vector<std::shared_ptr<Texture2D>> textures;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -63,25 +63,25 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-		std::vector<Texture2D> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
+		std::vector<std::shared_ptr<Texture2D>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, TexType::diffuse);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-		std::vector<Texture2D> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
+		std::vector<std::shared_ptr<Texture2D>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, TexType::specular);
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-		std::vector<Texture2D> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TexType::normal);
+		std::vector<std::shared_ptr<Texture2D>> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, TexType::normal);
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-		std::vector<Texture2D> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TexType::height);
+		std::vector<std::shared_ptr<Texture2D>> heightMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, TexType::height);
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 	}
 
 	return Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture2D> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
+std::vector<std::shared_ptr<Texture2D>> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, TexType typeName)
 {
-	std::vector<Texture2D> textures;
+	std::vector<std::shared_ptr<Texture2D>> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -89,7 +89,7 @@ std::vector<Texture2D> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureTyp
 		bool skip = false;
 		for (unsigned int j = 0; j < loaded_textures.size(); j++)
 		{
-			if (std::strcmp(loaded_textures[j].m_path.data(), str.C_Str()) == 0)
+			if (std::strcmp(loaded_textures[j]->m_path.data(), str.C_Str()) == 0)
 			{
 				textures.push_back(loaded_textures[j]);
 				skip = true;
@@ -101,9 +101,9 @@ std::vector<Texture2D> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureTyp
 			std::string filename(str.C_Str());
 			filename = directory + '/' + filename;
 
-			Texture2D texture(filename.c_str());
-			texture.m_path = str.C_Str();
-			texture.m_type = typeName;
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(filename.c_str());
+			texture->m_path = str.C_Str();
+			texture->m_type = typeName;
 			textures.push_back(texture);
 			loaded_textures.push_back(texture);
 		}

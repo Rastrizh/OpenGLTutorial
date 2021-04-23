@@ -23,10 +23,10 @@ Texture2D::Texture2D(unsigned int width, unsigned int hight)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-/*Texture2D::~Texture2D()
+Texture2D::~Texture2D()
 {
 	glDeleteTextures(1, &id);
-}*/
+}
 
 void Texture2D::CreateTexture(const char* path)
 {
