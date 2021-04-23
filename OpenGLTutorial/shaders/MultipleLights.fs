@@ -89,12 +89,15 @@ vec4 CalculateDirectionLight(DirectionLight light, vec3 normal, vec3 viewDir)
 
 	for(int i = 0; i < 2; i++)
 	{
-		ambient = light.ambient * texture(material.diffuse[i], TexCoords);
+		ambient  += texture(material.diffuse[i], TexCoords);
 		if(ambient.a < 0.1)
 			discard;
-		diffuse = light.diffuse * diff * texture(material.diffuse[i], TexCoords);
-		specular = light.specular * spec * texture(material.specular[i], TexCoords);
+		diffuse  += texture(material.diffuse[i], TexCoords);
+		specular += texture(material.specular[i], TexCoords);
 	}
+	ambient  *= light.ambient;
+	diffuse  *= diff * light.diffuse;
+	specular *= spec * light.specular;
 	return (ambient + diffuse + specular);
 }
 
