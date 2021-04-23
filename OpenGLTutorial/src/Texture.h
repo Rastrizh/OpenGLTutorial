@@ -29,6 +29,7 @@ private:
 public:
 	Texture2D(unsigned int width, unsigned int hight);
 	Texture2D(const char* path);
+	//~Texture2D();
 
 	inline int GetWidth() const { return m_width; }
 	inline int GetHeight() const { return m_height; }

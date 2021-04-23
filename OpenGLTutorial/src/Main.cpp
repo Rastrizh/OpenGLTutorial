@@ -10,6 +10,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Events/Event.h"
+#include "Input.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "Window.h"

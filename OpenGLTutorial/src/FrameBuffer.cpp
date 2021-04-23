@@ -14,6 +14,7 @@ FrameBuffer::~FrameBuffer()
 	glDeleteTextures(m_colorAttachments.size(), m_colorAttachments.data());
 	glDeleteRenderbuffers(1, &m_depthAttachment);
 	//glDeleteTextures(1, &m_depthAttachment);
+	glDeleteVertexArrays(1, &quadVAO);
 }
 
 void FrameBuffer::Initialize(unsigned int numColorAttachments)
