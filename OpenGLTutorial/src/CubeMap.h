@@ -11,6 +11,7 @@ private:
 	unsigned int textureID;
 public:
 	Cubemap(std::vector<std::string>& faces);
+	~Cubemap();
 	unsigned int LoadCubemap(std::vector<std::string>& faces);
 	void createCube();
 	void DrawSkybox();

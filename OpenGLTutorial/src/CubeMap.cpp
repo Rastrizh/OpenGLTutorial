@@ -12,6 +12,12 @@ Cubemap::Cubemap(std::vector<std::string>& faces)
 	createCube();
 }
 
+Cubemap::~Cubemap()
+{
+	glDeleteVertexArrays(1, &cubeVAO);
+	glDeleteTextures(1, &textureID);
+}
+
 unsigned int Cubemap::LoadCubemap(std::vector<std::string>& faces)
 {
 	glGenTextures(1, &textureID);
