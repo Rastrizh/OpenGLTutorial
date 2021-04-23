@@ -9,8 +9,7 @@ Texture2D::Texture2D(const char* path)
 Texture2D::Texture2D(unsigned int width, unsigned int hight)
 {
 	glGenTextures(1, &id);
-
-	Bind();
+	glBindTexture(GL_TEXTURE_2D, id);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, m_format, width, height, 0, m_format, GL_UNSIGNED_BYTE, m_data);
 
@@ -53,6 +52,7 @@ void Texture2D::CreateTexture(const char* path)
 
 		stbi_image_free(m_data);
 		m_data = nullptr;
+		m_path = path;
 	}
 	else
 	{
@@ -60,4 +60,9 @@ void Texture2D::CreateTexture(const char* path)
 		stbi_image_free(m_data);
 		m_data = nullptr;
 	}
+}
+
+void Texture2D::Bind()
+{
+	glBindTexture(GL_TEXTURE_2D, id);
 }

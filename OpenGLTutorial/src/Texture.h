@@ -17,6 +17,7 @@ class Texture2D
 {
 public:
 	TexType m_type;
+	std::string m_filename;
 	std::string m_path;
 
 private:
@@ -31,15 +32,15 @@ public:
 	Texture2D(const char* path);
 	~Texture2D();
 
+	bool operator==(const Texture2D& other) const { return id == other.id; }
+
+	inline GLenum GetFormat() const { return m_format; }
 	inline int GetWidth() const { return m_width; }
 	inline int GetHeight() const { return m_height; }
 	inline unsigned int GetId() const { return id; }
 
 	void CreateTexture(const char* path);
-	void Bind()
-	{
-		glBindTexture(GL_TEXTURE_2D, id);
-	}
+	void Bind();
 };
 
 #endif // TEXTURE_H

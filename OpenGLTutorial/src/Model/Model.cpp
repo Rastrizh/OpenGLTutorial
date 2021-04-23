@@ -5,13 +5,18 @@
 #include <assimp/postprocess.h>
 #include "Model.h"
 
+Model::Model(const char* path)
+{
+	LoadModel(path);
+}
+
 void Model::Draw(Shader& shader)
 {
 	for (auto &a : meshes)
 		a.Draw(shader);
 }
 
-void Model::LoadModel(std::string path)
+void Model::LoadModel(const char* path)
 {
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(path, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
@@ -21,7 +26,8 @@ void Model::LoadModel(std::string path)
 		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
 		return;
 	}
-	directory = path.substr(0, path.find_last_of('/'));
+	directory = std::string(path);
+	directory = directory.substr(0, directory.find_last_of('/'));
 
 	ProcessNode(scene->mRootNode, scene);
 }
@@ -89,7 +95,7 @@ std::vector<std::shared_ptr<Texture2D>> Model::LoadMaterialTextures(aiMaterial *
 		bool skip = false;
 		for (unsigned int j = 0; j < loaded_textures.size(); j++)
 		{
-			if (std::strcmp(loaded_textures[j]->m_path.data(), str.C_Str()) == 0)
+			if (std::strcmp(loaded_textures[j]->m_filename.c_str(), str.C_Str()) == 0)
 			{
 				textures.push_back(loaded_textures[j]);
 				skip = true;
@@ -98,11 +104,11 @@ std::vector<std::shared_ptr<Texture2D>> Model::LoadMaterialTextures(aiMaterial *
 		}
 		if (!skip)
 		{
-			std::string filename(str.C_Str());
-			filename = directory + '/' + filename;
+			std::string path(str.C_Str());
+			path = directory + '/' + path;
 
-			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(filename.c_str());
-			texture->m_path = str.C_Str();
+			std::shared_ptr<Texture2D> texture = std::make_shared<Texture2D>(path.c_str());
+			texture->m_filename = str.C_Str();
 			texture->m_type = typeName;
 			textures.push_back(texture);
 			loaded_textures.push_back(texture);
