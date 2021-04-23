@@ -45,7 +45,7 @@ int main()
 
 	CameraController cameraController;
 
-	Shader lightingShader("shaders/testVert.vs", "shaders/MultipleLights.fs");
+	Shader lightingShader("shaders/DirectionalLight.vs", "shaders/DirectionalLight.fs");
 	Shader skyboxShader("shaders/skyboxShader.vs", "shaders/skyboxShader.fs");
 	Shader screenShader("shaders/framebuffers_screen.vs", "shaders/framebuffers_screen.fs");
 
@@ -66,9 +66,9 @@ int main()
 	lightingShader.SetFloat("material.shininess", 64.0f);
 	
 	lightingShader.setVec3("directionlight.direction", -0.2f, -1.0f, -0.3f);
-	lightingShader.setVec4("directionlight.ambient", 0.2f, 0.2f, 0.2f, 1.0f);
-	lightingShader.setVec4("directionlight.diffuse", 0.8f, 0.8f, 0.8f, 1.0f);
-	lightingShader.setVec4("directionlight.specular", 0.6f, 0.6f, 0.6f, 1.0f);
+	lightingShader.setVec4("directionlight.ambient", 0.05f, 0.05f, 0.05f, 1.0f);
+	lightingShader.setVec4("directionlight.diffuse", 0.5f, 0.5f, 0.5f, 1.0f);
+	lightingShader.setVec4("directionlight.specular", 0.2f, 0.2f, 0.2f, 1.0f);
 
 	screenShader.Use();
 	screenShader.SetInt("screenTexture", 0);
